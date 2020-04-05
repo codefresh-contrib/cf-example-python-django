@@ -1,27 +1,32 @@
 version: '1.0'
 stages:
- - prepare
- - build
+ - clone
  - test
+ - deploy
 steps:
-  main_clone:
-    title: Cloning main repository...
-    stage: prepare
-    type: git-clone
-    repo: 'codefreshdemo/cf-example-python-django'
-    revision: master
-    git: github
-  build_my_image:
-    title: Building Docker Image
-    stage: build
-    type: build
-    image_name: my-django-image
-    working_directory: ./
-    tag: master
-    dockerfile: Dockerfile
-  test_my_image:
-     title: Running unit tests
-     stage: test
-     image: '${{build_my_image}}'
-     commands:
-       - python -m unittest composeexample.utils     
+  clone:
+    title: "Cloning main repository..."
+    stage: "clone"
+    type: "git-clone"
+    arguments:
+      repo: "codefresh-contrib/heroku-python-django-sample-app"
+      revision: "master"
+      git: "github"
+  run_unit_tests:
+     title: "Running unit tests..."
+     stage: "test"
+     type: "freestyle"
+     working_directory: "${{clone}}"
+     arguments:
+       image: "python:3.6-slim"
+       commands:
+         - "pip install -r requirements.txt --cache-dir=/codefresh/volume/pip-cache"
+         - "python -m unittest composeexample.utils"
+  deploy_to_heroku:
+    title: "Deploying to Heroku..."
+    stage: "deploy"
+    type: "heroku-deployer"
+    arguments:
+      APP_NAME: $APP_NAME
+      EMAIL: $EMAIL
+      API_TOKEN: $API_TOKEN
