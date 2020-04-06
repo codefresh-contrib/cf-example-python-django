@@ -46,7 +46,7 @@ docker run -p 8000:8000 django-app
 
 There are two options of deploying to Heroku with this example:
 
-- [Deploy source code to Heroku using the heroku-deployer plugin](codefresh.yml))
+- [Deploy source code to Heroku using the heroku-deployer plugin](codefresh.yml)
 - [Deploy a Docker image to Heroku using a push step](codefresh-heroku-push-image.yml)
 
 Copy and paste your desired yaml into the in-line editor to see them in action.
