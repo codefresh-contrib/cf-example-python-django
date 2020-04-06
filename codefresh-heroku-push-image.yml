@@ -1,0 +1,40 @@
+version: '1.0'
+stages:
+ - clone
+ - build
+ - test
+ - push
+steps:
+  clone:
+    title: "Cloning main repository..."
+    stage: "clone"
+    type: "git-clone"
+    arguments:
+      repo: "codefresh-contrib/heroku-python-django-sample-app"
+      revision: "master"
+      git: "github"
+  build:
+    title: "Building Docker Image..."
+    stage: "build"
+    type: "build"
+    working_directory: "./heroku-python-django-sample-app"
+    arguments: 
+      image_name: "heroku-django-image"
+      tag: "master"
+      dockerfile: "Dockerfile"
+  run_unit_tests:
+     title: "Running unit tests..."
+     stage: "test"
+     working_directory: "./heroku-python-django-sample-app"
+     arguments:
+       image: "${{build}}"
+       commands:
+         - "python -m unittest composeexample.utils"
+  push_image:
+    title: "Pushing image to Heroku..."
+    stage: "push"
+    type: "push"
+    arguments:
+      candidate: '${{build}}'
+      image_name: "heroku-django-image/web"
+      registry: "heroku"
