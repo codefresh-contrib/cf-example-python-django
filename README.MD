@@ -1,13 +1,10 @@
-# Dockerized Django application
+# Use Codefresh to Deploy to Heroku
 
-![Docker plus Django plus Codefresh](docker-django-codefresh.jpg)
+![heroku and codefresh](heroku-and-codefresh.png)
 
 This is an example Python application that uses Django, pip and Docker.
-It is packaged using Codefresh.
 
-More details can be found in [the documentation page](https://codefresh.io/docs/docs/learn-by-example/python/django/).
-
-
+More details can be found in [the documentation page](https://codefresh.io/docs//docs/yaml-examples/examples/deploy-to-heroku/).
 
 ## Instructions
 
@@ -47,10 +44,12 @@ docker run -p 8000:8000 django-app
 
 ## To use this project in Codefresh 
 
-There is also a [codefresh.yml](codefresh.yml) for easy usage with the [Codefresh](codefresh.io) CI/CD platform.
+There are two options of deploying to Heroku with this example:
 
+- (Deploy source code to Heroku using the heroku-deployer plugin)[codefresh.yml]
+- (Deploy a Docker image to Heroku using a push step)[codefresh-heroku-push-image.yml]
 
-Enjoy!
+Copy and paste your desired yaml into the in-line editor to see them in action.
 
 
 
