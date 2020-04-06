@@ -1,4 +1,4 @@
-# Use Codefresh to Deploy to Heroku
+# Deploy to Heroku Using Codefresh
 
 ![heroku and codefresh](heroku-and-codefresh.png)
 
