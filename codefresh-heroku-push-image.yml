@@ -4,6 +4,7 @@ stages:
  - build
  - test
  - push
+ - release
 steps:
   clone:
     title: "Cloning main repository..."
@@ -19,15 +20,16 @@ steps:
     type: "build"
     working_directory: "./heroku-python-django-sample-app"
     arguments: 
-      image_name: "heroku-django-image"
+      image_name: "${{IMAGE_NAME}}"
       tag: "master"
       dockerfile: "Dockerfile"
   run_unit_tests:
      title: "Running unit tests..."
      stage: "test"
+     type: "freestyle"
      working_directory: "./heroku-python-django-sample-app"
      arguments:
-       image: "${{build}}"
+       image: '${{build}}'
        commands:
          - "python -m unittest composeexample.utils"
   push_image:
@@ -36,5 +38,18 @@ steps:
     type: "push"
     arguments:
       candidate: '${{build}}'
-      image_name: "heroku-django-image/web"
+      image_name: "${{IMAGE_NAME}}/web"
       registry: "heroku"
+  release_image:
+    title: "Releasing image..."
+    stage: "release"
+    type: "freestyle"
+    arguments:
+      image: "nazarcodefresh/heroku-cli:alpine"
+      commands:
+        - >-
+          printf "machine api.heroku.com\n  login $EMAIL\n  password
+          $API_TOKEN\nmachine git.heroku.com\n  login $EMAIL\n  password
+          $API_TOKEN\n" > ~/.netrc
+        - "heroku container:release --app $IMAGE_NAME web"
+    
